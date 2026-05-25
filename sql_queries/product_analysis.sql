@@ -17,6 +17,8 @@ SELECT *
 FROM caterogy_ranking
 WHERE category_rank <=20
 
+============================================================================================================================================================================  
+  
 2. What are the top 20 most profitable products within each category?
 
 WITH cte AS
@@ -38,6 +40,9 @@ SELECT *
 FROM cte2
 WHERE rank_by_profit <=20
 
+ ============================================================================================================================================================================ 
+  
+
 3. Which product categories have the highest profit margin? 
 
 WITH cte AS
@@ -54,7 +59,8 @@ SELECT *,
 FROM cte
 ORDER BY profit_margin_percentage DESC
   
-
+============================================================================================================================================================================
+  
 4. What are the most profitable products within each category? 
 
 WITH cte AS
@@ -73,7 +79,9 @@ SELECT *
 FROM cte2
 WHERE rank_by_profit <=20
 
+============================================================================================================================================================================
 
+  
 5. Which brands generate the least profit within each category?
 
 WITH cte AS
@@ -88,7 +96,9 @@ SELECT *,
        DENSE_RANK() OVER(PARTITION BY category ORDER BY total_profit ASC) AS rank_by_less_profit
 FROM cte
   
+============================================================================================================================================================================
 
+  
 6. Which products contribute to the top 10% of revenue within each category?
 
 WITH cte AS
@@ -107,12 +117,6 @@ WITH cte AS
 SELECT *
 FROM cte2
 WHERE revenue_percentage <=10
-
-
-
-
-
-
 
 
 
