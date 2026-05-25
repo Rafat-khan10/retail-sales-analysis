@@ -19,6 +19,7 @@ SELECT *,
        ROUND((current_month_revenue - previous_month_revenue)::NUMERIC/NULLIF(previous_month_revenue, 0), 2) AS mom_revenue_growth
 FROM cte2
 
+ ======================================================================================================================================================================== 
 
 2. Which quarter generates the highest revenue each year?
 
