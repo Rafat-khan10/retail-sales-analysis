@@ -149,6 +149,46 @@ FROM cte2
 WHERE cumulative_perc <=10
 
 
+  ===========================================================================================================================================================================  
+
+6. Which age group generates the highest revenue across each product category?
+
+WITH customer_age AS
+  (SELECT customerkey,
+          EXTRACT(YEAR
+                  FROM AGE(
+                             (SELECT MAX(order_date)
+                              FROM sales), birthday)) AS age
+   FROM customers),
+     customer_age_group AS
+  (SELECT customerkey,
+          age,
+          CASE
+              WHEN age BETWEEN 18 AND 24 THEN 'Under 25'
+              WHEN age BETWEEN 25 AND 34 THEN '25-34'
+              WHEN age BETWEEN 35 AND 44 THEN '35-44'
+              WHEN age BETWEEN 45 AND 54 THEN '45-54'
+              WHEN age BETWEEN 55 AND 64 THEN '55-64'
+              ELSE '65+'
+          END AS age_group
+   FROM customer_age),
+     revenue AS
+  (SELECT ag.age_group,
+          p.category,
+          SUM(s.quantity * p.unit_price) AS total_revenue
+   FROM customer_age_group AS ag
+   INNER JOIN sales AS s ON ag.customerkey = s.customerkey
+   INNER JOIN products AS p ON p.productkey = s.productkey
+   GROUP BY ag.age_group,
+            p.category
+   ORDER BY total_revenue DESC),
+     ranking AS
+  (SELECT *,
+          DENSE_RANK() OVER(PARTITION BY age_group ORDER BY total_revenue DESC) AS rank_by_revenue
+   FROM revenue)
+SELECT *
+FROM ranking
+WHERE rank_by_revenue <=5
 
 
 
